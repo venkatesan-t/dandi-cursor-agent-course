@@ -23,35 +23,36 @@ export default function Playground() {
     setIsLoading(true);
     
     try {
-      // Validate the API key by fetching all API keys and checking if the provided key exists
-      const response = await fetch('/api/api-keys');
-      
-      if (!response.ok) {
-        throw new Error('Failed to validate API key');
-      }
+      // Validate the API key using secure server-side validation
+      const response = await fetch('/api/validate-key', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ apiKey }),
+      });
 
-      const apiKeys = await response.json();
-      
-      // Check if the provided API key exists and is active
-      const validKey = apiKeys.find((key: any) => 
-        key.key === apiKey && key.is_active === true
-      );
+      const result = await response.json();
 
-      if (validKey) {
-        // Show success message
-        showSnackbar('Valid API key, redirecting to API Playground', 'success');
+      if (result.isValid) {
+        // Show success message with key info
+        const keyInfo = result.keyInfo;
+        showSnackbar(
+          `Valid ${keyInfo.type} API key "${keyInfo.name}" - redirecting to API Playground`, 
+          'success'
+        );
         
-        // Navigate to protected page after 3 seconds
+        // Navigate to protected page after 2 seconds
         setTimeout(() => {
           router.push('/protected');
-        }, 3000);
+        }, 2000);
       } else {
-        // Show error message for invalid key
-        showSnackbar('Invalid API Key', 'error');
+        // Show specific error message
+        showSnackbar(result.error || 'Invalid API Key', 'error');
       }
     } catch (error) {
       console.error('Error validating API key:', error);
-      showSnackbar('Error validating API key', 'error');
+      showSnackbar('Unable to validate API key. Please try again.', 'error');
     } finally {
       setIsLoading(false);
     }

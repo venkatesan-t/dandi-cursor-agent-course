@@ -21,8 +21,13 @@ export default function Dashboard() {
 
   const handleCreateApiKey = async (data: { name: string; type: string; usageLimit: string }) => {
     try {
-      await createApiKey(data);
-      showSnackbar(`API key "${data.name}" created successfully!`, 'success');
+      const newApiKey = await createApiKey(data);
+      // Show a detailed success message that includes security note
+      showSnackbar(
+        `API key "${data.name}" created successfully! Make sure to copy it now - you won't be able to see it again.`, 
+        'success'
+      );
+      return newApiKey;
     } catch (err) {
       showSnackbar('Failed to create API key', 'error');
       throw err;

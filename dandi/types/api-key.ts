@@ -4,6 +4,7 @@ export interface ApiKey {
   key: string
   type: string
   created_at: string
+  updated_at?: string
   last_used?: string
   is_active: boolean
   usage: number
