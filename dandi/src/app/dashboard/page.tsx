@@ -1,10 +1,8 @@
 'use client';
 
-import Snackbar from '../../components/Snackbar';
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
-import PlanOverview from './components/PlanOverview';
-import ApiKeyTable from './components/ApiKeyTable/ApiKeyTable';
+import { Snackbar } from '../../components/ui';
+import { Sidebar, Header } from '../../components/layout';
+import { PlanOverview, ApiKeyTable } from './components';
 import { useApiKeys } from '../../hooks/useApiKeys';
 import { useSnackbar } from '../../hooks/useSnackbar';
 
